@@ -1,0 +1,15 @@
+[package]
+name = "image_resizer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.22.1"
+image = "0.24.0"
+serde = {version = "1.0.217",  features = ["derive"] }
+serde-wasm-bindgen = "0.6.5"
+wasm-bindgen = "0.2.100"
+
+
+[lib]
+crate-type = ["cdylib", "rlib"]
