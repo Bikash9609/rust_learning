@@ -1,7 +1,7 @@
-mod hello;
+mod todo_list;
 
-use hello::hello_cli;
+use todo_list::todo::init_todo;
 
 fn main() {
-    hello_cli();
+    init_todo();
 }
