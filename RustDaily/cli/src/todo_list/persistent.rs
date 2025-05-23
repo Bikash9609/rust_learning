@@ -1,10 +1,14 @@
+use super::storage::{read_file, write_file};
+use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::io;
 
-enum Status {
-    Completed,
-    InProgress,
-}
+// enum Action {
+//     List,
+//     Add { description: String },
+//     Remove { index: usize },
+//     Update { index: usize, status: Status },
+// }
 
 impl fmt::Display for Status {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -19,13 +23,13 @@ impl fmt::Display for Status {
     }
 }
 
-// enum Action {
-//     List,
-//     Add { description: String },
-//     Remove { index: usize },
-//     Update { index: usize, status: Status },
-// }
+#[derive(Serialize, Deserialize)]
+enum Status {
+    Completed,
+    InProgress,
+}
 
+#[derive(Serialize, Deserialize)]
 struct Task {
     id: usize,
     description: String,
@@ -35,14 +39,29 @@ struct Task {
 struct Todo {
     list: Vec<Task>,
     task_index: usize,
+    storage_path: String,
 }
 
 impl Todo {
+    fn hydrate(&mut self) {
+        let content = read_file(&self.storage_path).unwrap();
+        self.list = serde_json::from_str(&content).unwrap_or(Vec::new());
+        println!("Hydrated list!")
+    }
+
     fn new() -> Self {
-        Todo {
+        let mut todo = Todo {
             list: Vec::new(),
             task_index: 1,
-        }
+            storage_path: "todo.json".to_string(),
+        };
+        todo.hydrate();
+        todo
+    }
+
+    fn save_todo(&mut self) {
+        let serialized_list = serde_json::to_string(&self.list).expect("Error serializing list");
+        write_file(&self.storage_path, &serialized_list).expect("Error saving list!");
     }
 
     fn increment_id(&mut self) {
@@ -57,6 +76,7 @@ impl Todo {
         };
         self.list.push(new_task);
         self.increment_id();
+        self.save_todo();
         self.list
             .last()
             .expect("Task was just pushed but not able to return it!")
@@ -71,17 +91,19 @@ impl Todo {
         }
         self.list.remove(id - 1);
         println!("Task removed!");
+        self.save_todo();
         Ok(())
     }
 
     fn update(&mut self, id: usize, update_type: Status) -> &Task {
-        let item_to_update = self
+        let index = self
             .list
             .iter_mut()
-            .find(|task| task.id == id)
+            .position(|task| task.id == id)
             .expect("No such id found");
-        item_to_update.status = update_type;
-        item_to_update
+        self.list[index].status = update_type;
+        self.save_todo();
+        &self.list[index]
     }
 
     fn list(&mut self) -> &Vec<Task> {
@@ -103,7 +125,7 @@ pub fn init_todo() {
 }
 
 fn print_welcome() {
-    print!("\x1Bc");
+    // print!("\x1Bc");
     println!("Welconme to the TODO app!");
     println!(
         "Commands: add <description>, list, remove <id>, update <id> <new status(d|ip)>, exit"
