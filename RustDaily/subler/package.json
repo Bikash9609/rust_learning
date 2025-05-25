@@ -1,0 +1,41 @@
+{
+  "name": "subler",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@mantine/core": "^8.0.1",
+    "@mantine/dropzone": "^8.0.1",
+    "@mantine/hooks": "^8.0.1",
+    "@mantine/spotlight": "^8.0.1",
+    "@react-rxjs/core": "^0.10.8",
+    "@react-rxjs/utils": "^0.9.7",
+    "@tabler/icons-react": "^3.33.0",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-fs": "~2",
+    "@tauri-apps/plugin-opener": "^2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-resizable-panels": "^3.0.2",
+    "rxjs": "^7.8.2",
+    "sass": "^1.89.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "postcss": "^8.5.3",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3"
+  },
+  "packageManager": "yarn@4.9.1"
+}

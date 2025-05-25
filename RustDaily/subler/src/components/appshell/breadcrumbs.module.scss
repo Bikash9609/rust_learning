@@ -1,0 +1,13 @@
+.breadcrumbGroup {
+  flex-wrap: nowrap;
+}
+
+.breadcrumbAnchor {
+  max-width: 100px;
+  text-overflow: ellipsis;
+  display: inline-block;
+  &:hover {
+    text-decoration: none;
+    color: var(--mantine-color-blue-6) !important;
+  }
+}
