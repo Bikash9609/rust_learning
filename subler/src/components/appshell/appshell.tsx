@@ -37,7 +37,8 @@ export function AppCover({ children }: PropsWithChildren) {
               }}>
               {baseDir.files.map(item => <NavLink key={item.path}
                 href="#"
-                label={item.path}
+                label={item.name}
+                description={item.path}
               // leftSection={<IconHome2 size={16} stroke={1.5} />}
               />)}
             </Box>
