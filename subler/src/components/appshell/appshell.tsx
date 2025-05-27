@@ -1,18 +1,23 @@
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Skeleton, Box, rem, Flex, useMantineTheme, NavLink } from "@mantine/core";
+import {
+  Skeleton,
+  Box,
+  rem,
+  Flex,
+  useMantineTheme,
+  NavLink,
+  Title,
+} from "@mantine/core";
 import { PropsWithChildren } from "react";
 import AppHeader from "./header";
 import { AppPath } from "./breadcrumbs";
 import { IconGripHorizontal } from "@tabler/icons-react";
+import { SideDrawer } from "./side-drawer";
 import styles from "./appshell.module.scss";
-import { useStateObservable } from "@react-rxjs/core";
-import { loadBaseDir$ } from "../../rxjs/baseDirState";
 
 export function AppCover({ children }: PropsWithChildren) {
-  const baseDir = useStateObservable(loadBaseDir$())
   const { colors } = useMantineTheme();
 
-  console.log(baseDir)
   return (
     <Box h="100vh" display="flex" style={{ flexDirection: "column" }}>
       {/* Header */}
@@ -21,7 +26,8 @@ export function AppCover({ children }: PropsWithChildren) {
         px="md"
         style={{ borderBottom: `1px solid ${colors.gray[3]}` }}
         display="flex"
-        ta="center">
+        ta="center"
+      >
         <AppHeader />
       </Flex>
       {/* Main Content */}
@@ -31,16 +37,22 @@ export function AppCover({ children }: PropsWithChildren) {
             <Box
               h="100%"
               bg="gray.1"
-              p="md"
+              py="xs"
+              px={rem(5)}
               style={{
                 overflowY: "auto",
-              }}>
-              {baseDir.files.map(item => <NavLink key={item.path}
-                href="#"
-                label={item.name}
-                description={item.path}
-              // leftSection={<IconHome2 size={16} stroke={1.5} />}
-              />)}
+              }}
+            >
+              <Title
+                px={rem(12)}
+                order={6}
+                pb={rem(5)}
+                style={{ fontSize: rem(12) }}
+                c="gray"
+              >
+                Dashboard
+              </Title>
+              <SideDrawer />
             </Box>
           </Panel>
 
@@ -54,7 +66,8 @@ export function AppCover({ children }: PropsWithChildren) {
                 justifyContent: "center",
                 cursor: "col-resize",
                 background: "#f1f3f5",
-              }}>
+              }}
+            >
               <IconGripHorizontal size={16} stroke={1.5} />
             </Box>
           </PanelResizeHandle>

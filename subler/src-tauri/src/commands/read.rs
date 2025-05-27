@@ -1,8 +1,8 @@
 use dirs::home_dir;
 use serde::Serialize;
-use std::fs::{self};
+use std::env::consts;
+use std::fs;
 use std::path::PathBuf;
-use std::result;
 
 #[derive(Serialize)]
 pub struct File {
@@ -21,7 +21,10 @@ pub struct GetBaseResponse {
 #[tauri::command]
 pub fn get_base() -> Result<GetBaseResponse, ()> {
     let mut path = home_dir().expect("Unable to recognize home directory!");
-    path.push("Documents");
+
+    if consts::OS != "macos" {
+        path.push("Documents");
+    }
 
     match fs::read_dir(&path) {
         Ok(rd) => {
@@ -29,11 +32,17 @@ pub fn get_base() -> Result<GetBaseResponse, ()> {
             for entry in rd {
                 match entry {
                     Ok(result_path) => {
+                        let name = result_path.file_name().into_string().unwrap();
+
+                        if name.starts_with('.') {
+                            continue;
+                        };
+
                         paths.push(File {
                             path: result_path.path().as_path().display().to_string(),
                             is_dir: result_path.file_type().unwrap().is_dir(),
                             is_file: result_path.file_type().unwrap().is_file(),
-                            name: result_path.file_name().into_string().unwrap(),
+                            name,
                         });
                     }
                     Err(e) => {
@@ -41,6 +50,10 @@ pub fn get_base() -> Result<GetBaseResponse, ()> {
                     }
                 }
             }
+
+            paths.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+            paths.sort_by(|a, b| a.is_dir.cmp(&b.is_dir));
+
             Ok(GetBaseResponse {
                 files: paths,
                 root_dir: path,
@@ -51,4 +64,37 @@ pub fn get_base() -> Result<GetBaseResponse, ()> {
             Err(())
         }
     }
+}
+
+#[tauri::command]
+pub fn get_folder_files(path: &str) -> Result<Vec<File>, ()> {
+    let mut readables = Vec::<File>::new();
+    let entries = fs::read_dir(&path).map_err(|e| {
+        eprintln!("Failed to read directory:{}", e);
+    })?;
+
+    for file in entries {
+        let entry = match file {
+            Ok(content) => content,
+            Err(e) => {
+                eprintln!("{}", e);
+                continue;
+            }
+        };
+
+        let name = entry.file_name().into_string().unwrap();
+        if name.starts_with('.') {
+            continue;
+        };
+
+        let entry_path = entry.path();
+        readables.push(File {
+            is_dir: entry_path.is_dir(),
+            is_file: entry_path.is_file(),
+            name,
+            path: entry_path.display().to_string(),
+        });
+    }
+
+    Ok(readables)
 }
