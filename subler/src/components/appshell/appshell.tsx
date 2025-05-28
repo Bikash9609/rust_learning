@@ -31,8 +31,8 @@ export function AppCover({ children }: PropsWithChildren) {
       <Box flex="1 1 0" style={{ overflow: "hidden" }}>
         <PanelGroup direction="horizontal">
           <Panel
-            defaultSize={5}
-            collapsedSize={5}
+            defaultSize={5.1}
+            collapsedSize={5.1}
             collapsible
             onCollapse={handleCollapsedSidebar}
             onExpand={handleExpandSidebar}

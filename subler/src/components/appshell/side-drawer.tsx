@@ -7,7 +7,6 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { IconFile, IconFolder } from "@tabler/icons-react";
 import clsx from "clsx";
 
 import styles from "./side-drawer.module.scss";
