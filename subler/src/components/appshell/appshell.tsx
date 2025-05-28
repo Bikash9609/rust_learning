@@ -10,7 +10,7 @@ import styles from "./appshell.module.scss";
 export function AppCover({ children }: PropsWithChildren) {
   const { colors } = useMantineTheme();
 
-  const [collapsedSidebar, setCollapsedSidebar] = useState(false);
+  const [collapsedSidebar, setCollapsedSidebar] = useState(true);
 
   const handleCollapsedSidebar = () => setCollapsedSidebar(true);
   const handleExpandSidebar = () => setCollapsedSidebar(false);
@@ -31,7 +31,7 @@ export function AppCover({ children }: PropsWithChildren) {
       <Box flex="1 1 0" style={{ overflow: "hidden" }}>
         <PanelGroup direction="horizontal">
           <Panel
-            defaultSize={20}
+            defaultSize={5}
             collapsedSize={5}
             collapsible
             onCollapse={handleCollapsedSidebar}
@@ -81,7 +81,6 @@ export function AppCover({ children }: PropsWithChildren) {
           </PanelResizeHandle>
 
           <Panel minSize={40}>
-            {/* AppPath */}
             <AppPath />
             <Box
               bg="gray.1"
