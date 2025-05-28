@@ -1,8 +1,8 @@
 .resizeHandler {
-  border-left: 1px solid var(--mantine-color-gray-2);
-  & > div {
-    &:hover {
-      background: var(--mantine-color-gray-3) !important;
+    border-left: 1px solid var(--mantine-color-gray-2);
+    & > div {
+        &:hover {
+            background: var(--mantine-color-gray-3) !important;
+        }
     }
-  }
 }

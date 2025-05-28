@@ -52,7 +52,7 @@ pub fn get_base() -> Result<GetBaseResponse, ()> {
             }
 
             paths.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
-            paths.sort_by(|a, b| a.is_dir.cmp(&b.is_dir));
+            paths.sort_by(|a, b| b.is_dir.cmp(&a.is_dir));
 
             Ok(GetBaseResponse {
                 files: paths,

@@ -5,9 +5,10 @@
     display: flex;
     align-items: center;
 
-    &:hover {
-        background-color: var(--mantine-color-gray-light);
-        box-shadow: var(--mantine-shadow-sm);
+    &:hover,
+    &.active {
+        background-color: var(--mantine-color-white);
+        box-shadow: var(--mantine-shadow-xs);
     }
 
     &.withoutPath {

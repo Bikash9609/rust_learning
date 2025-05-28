@@ -1,14 +1,6 @@
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import {
-  Skeleton,
-  Box,
-  rem,
-  Flex,
-  useMantineTheme,
-  NavLink,
-  Title,
-} from "@mantine/core";
-import { PropsWithChildren } from "react";
+import { Box, rem, Flex, useMantineTheme, Title } from "@mantine/core";
+import { PropsWithChildren, useState } from "react";
 import AppHeader from "./header";
 import { AppPath } from "./breadcrumbs";
 import { IconGripHorizontal } from "@tabler/icons-react";
@@ -17,6 +9,11 @@ import styles from "./appshell.module.scss";
 
 export function AppCover({ children }: PropsWithChildren) {
   const { colors } = useMantineTheme();
+
+  const [collapsedSidebar, setCollapsedSidebar] = useState(false);
+
+  const handleCollapsedSidebar = () => setCollapsedSidebar(true);
+  const handleExpandSidebar = () => setCollapsedSidebar(false);
 
   return (
     <Box h="100vh" display="flex" style={{ flexDirection: "column" }}>
@@ -33,26 +30,37 @@ export function AppCover({ children }: PropsWithChildren) {
       {/* Main Content */}
       <Box flex="1 1 0" style={{ overflow: "hidden" }}>
         <PanelGroup direction="horizontal">
-          <Panel defaultSize={20} minSize={10} maxSize={40}>
+          <Panel
+            defaultSize={20}
+            collapsedSize={5}
+            collapsible
+            onCollapse={handleCollapsedSidebar}
+            onExpand={handleExpandSidebar}
+            minSize={10}
+            maxSize={40}
+          >
             <Box
               h="100%"
               bg="gray.1"
               py="xs"
+              pb="xl"
               px={rem(5)}
               style={{
                 overflowY: "auto",
               }}
             >
-              <Title
-                px={rem(12)}
-                order={6}
-                pb={rem(5)}
-                style={{ fontSize: rem(12) }}
-                c="gray"
-              >
-                Dashboard
-              </Title>
-              <SideDrawer />
+              {!collapsedSidebar && (
+                <Title
+                  px={rem(12)}
+                  order={6}
+                  pb={rem(5)}
+                  style={{ fontSize: rem(12) }}
+                  c="gray"
+                >
+                  Shortcuts
+                </Title>
+              )}
+              <SideDrawer showLabel={!collapsedSidebar} />
             </Box>
           </Panel>
 
@@ -75,7 +83,14 @@ export function AppCover({ children }: PropsWithChildren) {
           <Panel minSize={40}>
             {/* AppPath */}
             <AppPath />
-            <Box p="md" h="100%" style={{ overflowY: "auto" }}>
+            <Box
+              bg="gray.1"
+              p="0"
+              h="100%"
+              style={{
+                overflowY: "auto",
+              }}
+            >
               {children}
             </Box>
           </Panel>
